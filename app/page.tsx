@@ -7,7 +7,9 @@ export default function Home() {
       <Image src="/chicken.svg" alt="Zaxby's" width={95} height={95} />
       <h1 className={`text-4xl font-black uppercase`}>{"Southern Fried"}</h1>
       <h2 className={`text-8xl font-casual text-cyan-400`}>{"Shrimp"}</h2>
-      <h3 className={`text-4xl font-black uppercase p-4 bg-cyan-400`}>
+      <h3
+        className={`text-2xl font-black uppercase p-4 bg-cyan-400 text-blue-950`}
+      >
         {"Featuring ZaxSeas Surf & Turf Meal"}
       </h3>
     </div>
