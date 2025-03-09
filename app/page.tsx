@@ -3,8 +3,8 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-dvh">
-      <div className="flex flex-row items-center justify-center gap-4">
-        <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-row items-center justify-center gap-4 p-4">
+        <div className="flex flex-col items-center justify-center gap-4 min-w-1/2">
           <Image src="/logo.svg" alt="Zaxby's" width={210} height={51} />
           <Image src="/chicken.svg" alt="Zaxby's" width={95} height={95} />
           <h1 className={`text-4xl font-black uppercase`}>
