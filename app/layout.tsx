@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ZaxSans.variable} ${ZaxCasual.variable} ${ZaxSansSemiCondensed.variable} ${ZaxSerif.variable} font-sans antialiased`}
+        className={`${ZaxSans.variable} ${ZaxCasual.variable} ${ZaxSansSemiCondensed.variable} ${ZaxSerif.variable} font-sans antialiased bg-[url('/tile.png')] bg-repeat`}
       >
         {children}
       </body>
