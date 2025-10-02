@@ -8,9 +8,9 @@ import {
 } from "@/components/fonts";
 
 export const metadata: Metadata = {
-  title: "Your Zaxbys",
+  title: "Your ZAXBYS",
   description:
-    "Consistently creating encore experiences that enrich lives one person at a time",
+    "The store level management portal that enables your team to grow to win while they 'Consistently create encore experiences that enrich lives, one person at a time.'",
 };
 
 export default function RootLayout({
