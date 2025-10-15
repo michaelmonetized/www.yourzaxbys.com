@@ -6,6 +6,7 @@ import {
   ZaxSansSemiCondensed,
   ZaxSerif,
 } from "@/components/fonts";
+import Providers from "@/providers";
 
 export const metadata: Metadata = {
   title: "Your ZAXBYS",
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body
         className={`${ZaxSans.variable} ${ZaxCasual.variable} ${ZaxSansSemiCondensed.variable} ${ZaxSerif.variable} font-sans antialiased bg-[url('/tile.png')] bg-repeat`}
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
