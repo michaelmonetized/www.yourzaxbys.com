@@ -3,7 +3,7 @@
 import { AccessibilityWrapper } from "@/components/ui/layout/accessibility";
 import { Button } from "@/components/ui/button";
 import * as Sentry from "@sentry/nextjs";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function GlobalError({
@@ -13,6 +13,8 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);
