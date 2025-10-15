@@ -1,7 +1,20 @@
 {
-  "name": "www.yourzaxbys.com",
-  "version": "0.1.0",
+  "name": "zaxbys-franchise-management-platform",
+  "version": "1.0.0",
+  "description": "Comprehensive management platform for Zaxby's franchise owners, above-store team members, and in-store managers",
   "private": true,
+  "keywords": [
+    "zaxbys",
+    "franchise",
+    "management",
+    "restaurant",
+    "analytics",
+    "hr",
+    "operations",
+    "dashboard"
+  ],
+  "author": "Zaxby's Franchising LLC",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -34,6 +47,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@sentry/nextjs": "^10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.27.3",
