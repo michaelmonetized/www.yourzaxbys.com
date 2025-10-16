@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -11,39 +10,12 @@ import {
   TrendingUp, 
   Star, 
   CheckCircle,
-  ArrowRight,
   Target,
   Award,
   Zap,
-  Smartphone,
-  Globe,
-  Headphones
+  Globe
 } from "lucide-react";
-
-// CTA button handlers
-const handleStartTrial = () => {
-  // TODO: Implement trial signup flow
-  console.log("Start Free Trial clicked");
-  // This would typically navigate to signup or open a modal
-};
-
-const handleWatchDemo = () => {
-  // TODO: Implement demo modal or video
-  console.log("Watch Demo clicked");
-  // This would typically open a demo modal or navigate to demo page
-};
-
-const handleScheduleDemo = () => {
-  // TODO: Implement demo scheduling
-  console.log("Schedule Demo clicked");
-  // This would typically open a scheduling modal or navigate to scheduling page
-};
-
-const handleGetStarted = () => {
-  // TODO: Implement signup flow
-  console.log("Get Started Today clicked");
-  // This would typically navigate to signup or onboarding
-};
+import { HeroCTA, SolutionCTA, FinalCTA } from "@/components/cta";
 
 export default function Home() {
   return (
@@ -68,15 +40,7 @@ export default function Home() {
             streamlined HR management, and comprehensive operational tools to maximize success.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button size="lg" className="text-lg px-8 py-6 bg-red-600 hover:bg-red-700 text-white" onClick={handleStartTrial}>
-              Start Free Trial
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6" onClick={handleWatchDemo}>
-              Watch Demo
-            </Button>
-          </div>
+          <HeroCTA />
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
@@ -455,15 +419,7 @@ export default function Home() {
             <p className="text-xl mb-6 opacity-90">
               Join the growing community of successful Zaxby's franchisees using our platform
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-6" onClick={handleStartTrial}>
-                Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white text-red-600 hover:bg-gray-100" onClick={handleScheduleDemo}>
-                Schedule Demo
-              </Button>
-            </div>
+            <SolutionCTA />
           </div>
         </div>
       </section>
@@ -479,16 +435,7 @@ export default function Home() {
             to optimize operations, reduce costs, and grow their business.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button size="lg" className="text-lg px-8 py-6 bg-red-600 hover:bg-red-700 text-white" onClick={handleGetStarted}>
-              Get Started Today
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <div className="flex items-center text-gray-300">
-              <Headphones className="h-5 w-5 mr-2" />
-              <span>Need help? Call (555) 123-ZAXBYS</span>
-            </div>
-          </div>
+          <FinalCTA />
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
@@ -511,49 +458,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <Image src="/logo.svg" alt="Zaxby's" width={200} height={49} className="mb-4" />
-              <p className="text-gray-400">
-                Empowering Zaxby's franchisees with comprehensive management tools.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Analytics Dashboard</li>
-                <li>HR Management</li>
-                <li>Maintenance System</li>
-                <li>Uniform Management</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Documentation</li>
-                <li>Help Center</li>
-                <li>Contact Support</li>
-                <li>Status Page</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-                <li>Cookie Policy</li>
-                <li>Data Protection</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Zaxby's Franchising LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

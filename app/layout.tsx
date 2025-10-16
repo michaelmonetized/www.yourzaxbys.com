@@ -7,6 +7,8 @@ import {
   ZaxSerif,
 } from "@/components/fonts";
 import Providers from "@/providers";
+import { Navigation } from "@/components/layout/navigation";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Your ZAXBYS",
@@ -22,10 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${ZaxSans.variable} ${ZaxCasual.variable} ${ZaxSansSemiCondensed.variable} ${ZaxSerif.variable} font-sans antialiased bg-[url('/tile.png')] bg-repeat`}
+        className={`${ZaxSans.variable} ${ZaxCasual.variable} ${ZaxSansSemiCondensed.variable} ${ZaxSerif.variable} font-sans antialiased`}
       >
         <Providers>
-          {children}
+          <Navigation />
+          <main>
+            {children}
+          </main>
+          <Footer />
         </Providers>
       </body>
     </html>
