@@ -155,6 +155,25 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   )
 }
 
+interface FormGroupProps extends React.ComponentProps<"div"> {
+  title?: string
+}
+
+function FormGroup({ className, title, children, ...props }: FormGroupProps) {
+  return (
+    <div
+      data-slot="form-group"
+      className={cn("flex flex-wrap gap-4 p-4 border rounded-lg", className)}
+      {...props}
+    >
+      {title && (
+        <h3 className="w-full text-lg font-semibold mb-2">{title}</h3>
+      )}
+      {children}
+    </div>
+  )
+}
+
 export {
   useFormField,
   Form,
@@ -164,4 +183,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormGroup,
 }

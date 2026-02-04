@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { 
   Menu, 
@@ -15,9 +16,7 @@ import {
   Newspaper,
   MessageSquare,
   Users,
-  Shield,
-  Building,
-  HelpCircle
+  LayoutDashboard,
 } from "lucide-react";
 
 const navigation = [
@@ -26,7 +25,6 @@ const navigation = [
   { name: "About", href: "/about", icon: Users },
   { name: "Testimonials", href: "/testimonials", icon: Star },
   { name: "Blog", href: "/blog", icon: FileText },
-  { name: "News", href: "/news", icon: Newspaper },
   { name: "Contact", href: "/contact", icon: MessageSquare },
 ];
 
@@ -39,6 +37,7 @@ const resources = [
 ];
 
 export function Navigation() {
+  const { isSignedIn, isLoaded } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
 
@@ -93,12 +92,32 @@ export function Navigation() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex lg:items-center lg:space-x-4">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button size="sm" className="bg-red-600 hover:bg-red-700">
-              Start Free Trial
-            </Button>
+            {!isLoaded ? (
+              <div className="h-8 w-24 bg-gray-200 animate-pulse rounded" />
+            ) : isSignedIn ? (
+              <>
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm">
+                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
+                <UserButton afterSignOutUrl="/" />
+              </>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="sm" className="bg-red-600 hover:bg-red-700">
+                    Start Free Trial
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -154,12 +173,33 @@ export function Navigation() {
             <div className="border-t border-gray-200 pb-3 pt-4">
               <div className="flex items-center px-3">
                 <div className="flex flex-col space-y-2 w-full">
-                  <Button variant="ghost" size="sm" className="justify-start">
-                    Sign In
-                  </Button>
-                  <Button size="sm" className="bg-red-600 hover:bg-red-700">
-                    Start Free Trial
-                  </Button>
+                  {isSignedIn ? (
+                    <>
+                      <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="outline" size="sm" className="w-full justify-start">
+                          <LayoutDashboard className="h-4 w-4 mr-2" />
+                          Dashboard
+                        </Button>
+                      </Link>
+                      <div className="flex items-center gap-2 px-2">
+                        <UserButton afterSignOutUrl="/" />
+                        <span className="text-sm text-gray-600">Account</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                        <Button variant="ghost" size="sm" className="justify-start w-full">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
+                        <Button size="sm" className="bg-red-600 hover:bg-red-700 w-full">
+                          Start Free Trial
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

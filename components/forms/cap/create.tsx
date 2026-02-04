@@ -34,7 +34,7 @@ import {
 import { Plus, Trash2 } from "lucide-react";
 
 const capSchema = z.object({
-  type: z.enum(["fs", "rer"], { required_error: "Please select a CAP type" }),
+  type: z.enum(["fs", "rer"], { message: "Please select a CAP type" }),
   score: z.number().min(0).max(100, "Score must be between 0 and 100"),
   inspector: z.string().min(1, "Inspector name is required"),
   mod: z.string().min(1, "MOD is required"),
