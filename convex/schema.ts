@@ -34,7 +34,9 @@ export default defineSchema({
     state: v.optional(v.string()),
     zip: v.optional(v.string()),
     dob: v.optional(v.string()),
-    ssn: v.optional(v.string()),
+    // SECURITY: SSN should NEVER be stored. Use ssnLast4 for display only.
+    // Full SSN is only used client-side for EID generation, then discarded.
+    ssnLast4: v.optional(v.string()), // Last 4 digits only, for display purposes
     rate: v.optional(v.string()),
     type: v.optional(v.string()),
     status: v.union(
