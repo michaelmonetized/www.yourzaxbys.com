@@ -24,7 +24,6 @@ export const list = query({
 // Create a new employee
 export const create = mutation({
   args: {
-    eid: v.string(),
     first: v.string(),
     last: v.string(),
     email: v.string(),
@@ -66,9 +65,11 @@ export const create = mutation({
     }
 
     const now = Date.now();
+    const eid = generateEid();
 
     return await ctx.db.insert("employees", {
       ...args,
+      eid,
       createdAt: now,
       updatedAt: now,
     });
