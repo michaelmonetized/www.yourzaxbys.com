@@ -25,7 +25,7 @@ export interface EmployeeProps {
   state?: string;
   zip?: string;
   dob?: string;
-  ssn?: string;
+  ssnLast4?: string;
   payType?: "hourly" | "salary";
   payRate?: number;
 }
@@ -71,12 +71,19 @@ export const isValidEID = (eid: string): boolean => {
 };
 
 // Zod validators
+// Full SSN validator - used client-side only for EID generation, NEVER stored
 export const ssn = z
   .string()
   .regex(
     /^\d{3}-\d{2}-\d{4}$/,
     "SSN must be in format XXX-XX-XXXX"
   )
+  .optional();
+
+// Last 4 digits of SSN - the ONLY SSN data that may be stored
+export const ssnLast4 = z
+  .string()
+  .regex(/^\d{4}$/, "Must be exactly 4 digits")
   .optional();
 
 export const dob = z
@@ -133,7 +140,8 @@ export const EmployeeObject = z.object({
   state: z.string().optional(),
   zip: z.string().optional(),
   dob: dob,
-  ssn: ssn,
+  ssn: ssn, // Client-side only, used for EID generation, never sent to server
+  ssnLast4: ssnLast4, // Only last 4 digits stored
   payType: z.enum(["hourly", "salary"]).optional(),
   payRate: z.number().optional(),
 });

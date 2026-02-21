@@ -29,9 +29,8 @@ import {
 
 export default function EmployeeEditForm({ eid }: { eid: string }) {
   const router = useRouter();
-  const employee = useQuery(api.employees.getEmployee, {
-    field: "eid",
-    value: eid,
+  const employee = useQuery(api.employees.getEmployeeByEid, {
+    eid: eid,
   });
   const updateEmployee = useMutation(api.employees.updateEmployee);
 
@@ -66,20 +65,17 @@ export default function EmployeeEditForm({ eid }: { eid: string }) {
       form.reset({
         ...(employee as unknown as z.infer<typeof EmployeeObject>),
         dob: formatDateForInput(employee.dob) as unknown as string,
-        hired: formatDateForInput(employee.hired) as unknown as string,
-        terminated: formatDateForInput(employee.terminated) as unknown as
-          | string
-          | undefined,
+        hireDate: formatDateForInput(employee.hireDate || employee.hired) as unknown as string,
       });
     }
   }, [employee, form]);
 
-  const onSubmit = async (data: EmployeeProps) => {
+  const onSubmit = async (data: z.infer<typeof EmployeeObject>) => {
     setSubmitting(true);
     if (!employee?._id) return;
     await updateEmployee({ id: employee._id, ...data } as unknown as {
       id: Parameters<typeof updateEmployee>[0]["id"];
-    } & EmployeeProps);
+    } & z.infer<typeof EmployeeObject>);
     setSubmitting(false);
     router.push("/dashboard/team");
   };
@@ -226,19 +222,14 @@ export default function EmployeeEditForm({ eid }: { eid: string }) {
               </FormItem>
             )}
           />
-          <FormField
-            name="ssn"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>SSN</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {employee.ssnLast4 && (
+            <FormItem>
+              <FormLabel>SSN</FormLabel>
+              <FormControl>
+                <Input value={`***-**-${employee.ssnLast4}`} disabled readOnly />
+              </FormControl>
+            </FormItem>
+          )}
           <FormField
             name="dob"
             control={form.control}
@@ -256,24 +247,11 @@ export default function EmployeeEditForm({ eid }: { eid: string }) {
 
         <FormGroup title="Employment">
           <FormField
-            name="hired"
+            name="hireDate"
             control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Hired Date</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="terminated"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Terminated Date</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>
@@ -327,20 +305,20 @@ export default function EmployeeEditForm({ eid }: { eid: string }) {
 
         <FormGroup title="Compensation">
           <FormField
-            name="rate"
+            name="payRate"
             control={form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pay Rate</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type="number" step="0.01" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
-            name="type"
+            name="payType"
             control={form.control}
             render={({ field }) => (
               <FormItem>
