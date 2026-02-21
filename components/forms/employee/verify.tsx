@@ -28,7 +28,7 @@ import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
-  ssn as ssnValidator,
+  ssnLast4 as ssnLast4Validator,
   dob as dobValidator,
   email as emailValidator,
 } from "@/lib/employee";
@@ -37,7 +37,7 @@ export default function Verify() {
   const form = useForm({
     resolver: zodResolver(
       z.object({
-        ssn: ssnValidator,
+        ssn: ssnLast4Validator,
         dob: dobValidator,
         email: emailValidator,
       })
@@ -64,9 +64,8 @@ export default function Verify() {
     redirect(`${process.env.NEXT_PUBLIC_APP_URL}/login?error=Invalid key`);
   }
 
-  const employee = useQuery(api.employees.getEmployee, {
-    field: "eid",
-    value: eid,
+  const employee = useQuery(api.employees.getEmployeeByEid, {
+    eid: eid,
   });
 
   const { isSignedIn, isLoaded, user } = useUser();
@@ -99,14 +98,15 @@ export default function Verify() {
   const updatedEmployee = useMutation(api.employees.updateEmployee);
 
   const onSubmit = async (data: {
-    ssn: string;
-    dob: string;
+    ssn?: string;
+    dob?: string;
     email: string;
   }) => {
     const { ssn, dob, email } = data;
 
+    // SECURITY: Compare last 4 digits only - full SSN is never stored
     if (
-      ssn !== employee.ssn ||
+      ssn !== employee.ssnLast4 ||
       dob !== employee.dob ||
       email !== employee.email
     ) {
@@ -115,10 +115,9 @@ export default function Verify() {
       );
     }
 
-    updatedEmployee({
+    await updatedEmployee({
       id: employee._id,
-      uid: user.id,
-      ...employee,
+      clerkUserId: user.id,
     });
 
     redirect(`${process.env.NEXT_PUBLIC_APP_URL}/onboarding`);
@@ -132,7 +131,7 @@ export default function Verify() {
           name="ssn"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>SSN</FormLabel>
+              <FormLabel>Last 4 of SSN</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

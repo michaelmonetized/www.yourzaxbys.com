@@ -74,7 +74,7 @@ export default function EmployeeForm() {
     }
   };
 
-  const onSubmit = async (data: EmployeeProps) => {
+  const onSubmit = async (data: z.infer<typeof EmployeeObject>) => {
     const errors: Error[] = [];
     console.log(data);
 
@@ -87,7 +87,11 @@ export default function EmployeeForm() {
     console.log(validated);
 
     try {
-      const created = await createEmployee(validated);
+      // SECURITY: Never send full SSN to the server
+      // Extract last 4 digits for storage, discard the rest
+      const { ssn: _ssnDiscarded, ...safeData } = validated;
+      const ssnLast4 = _ssnDiscarded ? _ssnDiscarded.replace(/\D/g, "").slice(-4) : undefined;
+      const created = await createEmployee({ ...safeData, ssnLast4 });
       console.log(created);
     } catch (error) {
       errors.push({ sender: "create", message: "Failed to create employee" });
@@ -110,7 +114,7 @@ export default function EmployeeForm() {
     }
   };
 
-  const handleSubmit = async (data: EmployeeProps) => {
+  const handleSubmit = async (data: z.infer<typeof EmployeeObject>) => {
     setSubmitting(true);
     await onSubmit(data);
     setSubmitting(false);
@@ -447,14 +451,14 @@ export default function EmployeeForm() {
           />
           <FormField
             control={form.control}
-            name="hired"
+            name="hireDate"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Hired Date</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    {...form.register("hired")}
+                    {...form.register("hireDate")}
                     title="Hired Date"
                     type="date"
                     tabIndex={10}
@@ -475,20 +479,21 @@ export default function EmployeeForm() {
           />
           <FormField
             control={form.control}
-            name="rate"
+            name="payRate"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pay Rate</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    {...form.register("rate")}
+                    {...form.register("payRate")}
                     title="Rate"
-                    type="text"
+                    type="number"
+                    step="0.01"
                     tabIndex={15}
                     placeholder="Enter Rate"
                     required
-                    defaultValue={field.value ? field.value : "13.50"}
+                    defaultValue={field.value ? field.value : 13.50}
                     className="grow-1 shrink-0"
                   />
                 </FormControl>
@@ -498,14 +503,14 @@ export default function EmployeeForm() {
           />
           <FormField
             control={form.control}
-            name="type"
+            name="payType"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pay Type</FormLabel>
                 <FormControl>
                   <Select
                     {...field}
-                    {...form.register("type")}
+                    {...form.register("payType")}
                     required
                     onValueChange={field.onChange}
                     defaultValue={field.value ? field.value : "hourly"}
