@@ -119,8 +119,14 @@ export const createEmployee = mutation({
     )),
     storeId: v.optional(v.string()),
     hireDate: v.optional(v.string()),
+    ssnLast4: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Validate ssnLast4 if provided - must be exactly 4 digits
+    if (args.ssnLast4 && !/^\d{4}$/.test(args.ssnLast4)) {
+      throw new Error("ssnLast4 must be exactly 4 digits");
+    }
+
     // Check if email already exists
     const existing = await ctx.db
       .query("employees")
@@ -211,17 +217,26 @@ export const listEmployees = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("employees");
-
     if (args.status) {
-      query = query.withIndex("by_status", (q) => q.eq("status", args.status!));
-    } else if (args.storeId) {
-      query = query.withIndex("by_store", (q) =>
-        q.eq("storeId", args.storeId!)
-      );
+      return await ctx.db
+        .query("employees")
+        .withIndex("by_status", (q) => q.eq("status", args.status!))
+        .order("desc")
+        .take(args.limit ?? 100);
     }
 
-    return await query.order("desc").take(args.limit ?? 100);
+    if (args.storeId) {
+      return await ctx.db
+        .query("employees")
+        .withIndex("by_store", (q) => q.eq("storeId", args.storeId!))
+        .order("desc")
+        .take(args.limit ?? 100);
+    }
+
+    return await ctx.db
+      .query("employees")
+      .order("desc")
+      .take(args.limit ?? 100);
   },
 });
 
