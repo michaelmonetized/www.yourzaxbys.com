@@ -86,11 +86,12 @@ export default function EmployeeForm() {
     }
     console.log(validated);
 
+    // SECURITY: Never send full SSN to the server
+    // Extract last 4 digits for storage, discard the rest
+    const { ssn: _ssnDiscarded, ...safeData } = validated;
+    const ssnLast4 = _ssnDiscarded ? _ssnDiscarded.replace(/\D/g, "").slice(-4) : undefined;
+
     try {
-      // SECURITY: Never send full SSN to the server
-      // Extract last 4 digits for storage, discard the rest
-      const { ssn: _ssnDiscarded, ...safeData } = validated;
-      const ssnLast4 = _ssnDiscarded ? _ssnDiscarded.replace(/\D/g, "").slice(-4) : undefined;
       const created = await createEmployee({ ...safeData, ssnLast4 });
       console.log(created);
     } catch (error) {
@@ -100,7 +101,8 @@ export default function EmployeeForm() {
       throw new Error("Failed to create employee");
     }
 
-    const invited = await inviteEmployee(validated);
+    // SECURITY: Send safe data without full SSN to invite endpoint
+    const invited = await inviteEmployee({ ...safeData, ssnLast4 } as z.infer<typeof EmployeeObject>);
     if (invited.error) {
       setSubmitting(false);
       errors.push({ sender: "invite", message: "Failed to send invite" });
