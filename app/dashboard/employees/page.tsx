@@ -114,7 +114,6 @@ export default function EmployeesPage() {
 
     try {
       await createEmployee({
-        eid: `EMP-${Date.now()}`,
         first: newEmployee.first,
         last: newEmployee.last,
         email: newEmployee.email,

@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "Zaxby's Waynesville, NC Restaurant Manager <notify@uncap.us>",
+      from: "Zaxby's Waynesville, NC Restaurant Manager <notify@yourzaxbys.com>",
       to: [email],
       subject: `Welcome to Zaxby's Waynesville, NC Restaurant`,
       react: inviteEmail,

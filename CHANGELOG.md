@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Security
+- Encrypted SSN fields using AES-256 encryption instead of storing plaintext (#11)
+- Restricted email domains to company-approved domains only (#12)
+
+### Fixed
+- Employee ID validation and uniqueness enforcement (#12)
+- SSN input masking and secure display in UI (#11)
+
+### Changed
+- Email domain whitelist for employee registration (#12)
+- Employee ID format standardization (#12)
+
 ## [1.0.0] - 2024-10-15
 
 ### Added
