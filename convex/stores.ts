@@ -4,16 +4,20 @@ import { v } from "convex/values";
 export const list = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("stores")
       .order("desc")
-      .collect();
+      .take(200);
   },
 });
 
 export const getByStoreNumber = query({
   args: { storeNumber: v.string() },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("stores")
       .withIndex("by_store_number", (q) => q.eq("storeNumber", args.storeNumber))
@@ -24,6 +28,8 @@ export const getByStoreNumber = query({
 export const getById = query({
   args: { id: v.id("stores") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.get(args.id);
   },
 });
@@ -31,10 +37,12 @@ export const getById = query({
 export const getActive = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("stores")
       .withIndex("by_status", (q) => q.eq("status", "active"))
-      .collect();
+      .take(200);
   },
 });
 
@@ -51,6 +59,8 @@ export const create = mutation({
     status: v.union(v.literal("active"), v.literal("inactive")),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const now = Date.now();
     return await ctx.db.insert("stores", {
       ...args,
@@ -74,6 +84,8 @@ export const update = mutation({
     status: v.optional(v.union(v.literal("active"), v.literal("inactive"))),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const { id, ...updates } = args;
     const filteredUpdates = Object.fromEntries(
       Object.entries(updates).filter(([_, value]) => value !== undefined)
@@ -89,6 +101,8 @@ export const update = mutation({
 export const remove = mutation({
   args: { id: v.id("stores") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     // Soft delete by setting status to inactive
     return await ctx.db.patch(args.id, {
       status: "inactive",
@@ -100,6 +114,8 @@ export const remove = mutation({
 export const hardDelete = mutation({
   args: { id: v.id("stores") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.delete(args.id);
   },
 });

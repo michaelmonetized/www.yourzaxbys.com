@@ -18,6 +18,8 @@ export const createCap = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const now = Date.now();
     return await ctx.db.insert("caps", {
       ...args,
@@ -31,6 +33,8 @@ export const createCap = mutation({
 export const getCap = query({
   args: { id: v.id("caps") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.get(args.id);
   },
 });
@@ -42,6 +46,8 @@ export const listCaps = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const caps = args.type
       ? await ctx.db.query("caps").withIndex("by_type", (q) => q.eq("type", args.type!)).order("desc").take(args.limit ?? 50)
       : await ctx.db.query("caps").order("desc").take(args.limit ?? 50);
@@ -69,6 +75,8 @@ export const updateCap = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const { id, ...updates } = args;
     const existing = await ctx.db.get(id);
     if (!existing) {
@@ -90,6 +98,8 @@ export const updateCap = mutation({
 export const deleteCap = mutation({
   args: { id: v.id("caps") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.delete(args.id);
   },
 });

@@ -14,10 +14,12 @@ function generateEid(): string {
 export const list = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("employees")
       .order("desc")
-      .collect();
+      .take(200);
   },
 });
 
@@ -55,6 +57,8 @@ export const create = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     // Check if email already exists
     const existing = await ctx.db
       .query("employees")
@@ -87,6 +91,8 @@ export const updateStatus = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.patch(args.id, {
       status: args.status,
       updatedAt: Date.now(),
@@ -122,6 +128,8 @@ export const createEmployee = mutation({
     ssnLast4: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     // Validate ssnLast4 if provided - must be exactly 4 digits
     if (args.ssnLast4 && !/^\d{4}$/.test(args.ssnLast4)) {
       throw new Error("ssnLast4 must be exactly 4 digits");
@@ -154,6 +162,8 @@ export const createEmployee = mutation({
 export const getEmployee = query({
   args: { id: v.id("employees") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.get(args.id);
   },
 });
@@ -162,6 +172,8 @@ export const getEmployee = query({
 export const getEmployeeByEid = query({
   args: { eid: v.string() },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("employees")
       .withIndex("by_eid", (q) => q.eq("eid", args.eid))
@@ -173,6 +185,8 @@ export const getEmployeeByEid = query({
 export const getEmployeeByEmail = query({
   args: { email: v.string() },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("employees")
       .withIndex("by_email", (q) => q.eq("email", args.email))
@@ -184,10 +198,12 @@ export const getEmployeeByEmail = query({
 export const getByStore = query({
   args: { storeId: v.string() },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("employees")
       .withIndex("by_store", (q) => q.eq("storeId", args.storeId))
-      .collect();
+      .take(200);
   },
 });
 
@@ -195,10 +211,12 @@ export const getByStore = query({
 export const getActive = query({
   args: {},
   handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db
       .query("employees")
       .withIndex("by_status", (q) => q.eq("status", "active"))
-      .collect();
+      .take(200);
   },
 });
 
@@ -217,6 +235,8 @@ export const listEmployees = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     if (args.status) {
       return await ctx.db
         .query("employees")
@@ -280,6 +300,8 @@ export const updateEmployee = mutation({
     hourlyRate: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const { id, ...updates } = args;
     const existing = await ctx.db.get(id);
     if (!existing) {
@@ -315,6 +337,8 @@ export const verifyEmployee = mutation({
     email: v.string(),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     const employee = await ctx.db
       .query("employees")
       .withIndex("by_eid", (q) => q.eq("eid", args.eid))
@@ -339,6 +363,8 @@ export const activateEmployee = mutation({
     clerkUserId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.patch(args.id, {
       status: "active",
       clerkUserId: args.clerkUserId,
@@ -351,6 +377,8 @@ export const activateEmployee = mutation({
 export const deleteEmployee = mutation({
   args: { id: v.id("employees") },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
     return await ctx.db.patch(args.id, {
       status: "terminated",
       updatedAt: Date.now(),
