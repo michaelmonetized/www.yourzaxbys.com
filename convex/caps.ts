@@ -42,10 +42,10 @@ export const listCaps = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("caps");
+    let query: any = ctx.db.query("caps");
 
     if (args.type) {
-      query = query.withIndex("by_type", (q) => q.eq("type", args.type!));
+      query = query.withIndex("by_type", (q: any) => q.eq("type", args.type!));
     }
 
     const caps = await query.order("desc").take(args.limit ?? 50);

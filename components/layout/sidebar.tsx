@@ -1,4 +1,16 @@
-import { outline } from "@/_project";
+// TODO: Replace with actual project outline when _project file is created
+const outline = {
+  private: [] as Array<{
+    anchor: string;
+    href: string;
+    title: string;
+    items?: Array<{
+      anchor: string;
+      href: string;
+      title: string;
+    }>;
+  }>
+};
 import { Link } from "@/components/link";
 import {
   Sidebar,

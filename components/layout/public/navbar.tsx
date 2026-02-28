@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/components/ui/navbar";
+import { Navigation as MainNavigation } from "@/components/layout/navigation";
 import { usePathname } from "next/navigation";
 
 export default function Navigation({
@@ -11,7 +11,7 @@ export default function Navigation({
   const pathname = usePathname();
   return (
     <div className="flex flex-col min-h-dvh grow">
-      <Navbar active={pathname} />
+      <MainNavigation />
       <div className="grow">{children}</div>
     </div>
   );
