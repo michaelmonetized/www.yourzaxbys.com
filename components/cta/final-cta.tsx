@@ -5,7 +5,6 @@ import { ArrowRight, Headphones } from "lucide-react";
 
 const handleGetStarted = () => {
   // TODO: Implement signup flow
-  console.log("Get Started Today clicked");
   // This would typically navigate to signup or onboarding
 };
 

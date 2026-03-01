@@ -1,4 +1,5 @@
 "use client";
+import * as Sentry from "@sentry/nextjs";
 
 import { useState, useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -108,7 +109,7 @@ export default function EditCapForm({ capId }: EditCapFormProps) {
       });
       // You might want to redirect or show a success message here
     } catch (error) {
-      console.error("Error updating CAP:", error);
+      Sentry.captureException(error);
     } finally {
       setIsSubmitting(false);
     }

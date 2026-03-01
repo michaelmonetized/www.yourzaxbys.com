@@ -7,7 +7,6 @@ export default async function NotFound() {
   const referer = headersList.get("referer");
   const domain = headersList.get("host");
 
-  console.log(headersList.entries());
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

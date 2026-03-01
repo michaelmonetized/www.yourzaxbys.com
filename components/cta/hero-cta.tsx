@@ -5,13 +5,11 @@ import { ArrowRight } from "lucide-react";
 
 const handleStartTrial = () => {
   // TODO: Implement trial signup flow
-  console.log("Start Free Trial clicked");
   // This would typically navigate to signup or open a modal
 };
 
 const handleWatchDemo = () => {
   // TODO: Implement demo modal or video
-  console.log("Watch Demo clicked");
   // This would typically open a demo modal or navigate to demo page
 };
 

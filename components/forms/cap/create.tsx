@@ -1,4 +1,5 @@
 "use client";
+import * as Sentry from "@sentry/nextjs";
 
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -88,7 +89,7 @@ export default function CreateCapForm() {
       form.reset();
       // You might want to redirect or show a success message here
     } catch (error) {
-      console.error("Error creating CAP:", error);
+      Sentry.captureException(error);
     } finally {
       setIsSubmitting(false);
     }

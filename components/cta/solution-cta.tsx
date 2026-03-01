@@ -5,13 +5,11 @@ import { ArrowRight } from "lucide-react";
 
 const handleStartTrial = () => {
   // TODO: Implement trial signup flow
-  console.log("Start Free Trial clicked");
   // This would typically navigate to signup or open a modal
 };
 
 const handleScheduleDemo = () => {
   // TODO: Implement demo scheduling
-  console.log("Schedule Demo clicked");
   // This would typically open a scheduling modal or navigate to scheduling page
 };
 
