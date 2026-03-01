@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 "use client";
 
 import NextLink from "next/link";
@@ -58,7 +59,7 @@ export const Link: typeof NextLink = (({ children, ...props }) => {
             if (!imageCache.has(String(props.href))) {
               void prefetchImages(String(props.href)).then((images) => {
                 imageCache.set(String(props.href), images);
-              }, console.error);
+              }, (err: unknown) => Sentry.captureException(err));
             }
 
             observer.unobserve(entry.target);

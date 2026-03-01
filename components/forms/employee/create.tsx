@@ -76,7 +76,6 @@ export default function EmployeeForm() {
 
   const onSubmit = async (data: z.infer<typeof EmployeeObject>) => {
     const errors: Error[] = [];
-    console.log(data);
 
     const validated = EmployeeObject.parse(data);
     if (!validated) {
@@ -84,7 +83,6 @@ export default function EmployeeForm() {
       setSubmitting(false);
       throw new Error("Invalid data");
     }
-    console.log(validated);
 
     try {
       // SECURITY: Never send full SSN to the server
@@ -92,11 +90,9 @@ export default function EmployeeForm() {
       const { ssn: _ssnDiscarded, ...safeData } = validated;
       const ssnLast4 = _ssnDiscarded ? _ssnDiscarded.replace(/\D/g, "").slice(-4) : undefined;
       const created = await createEmployee({ ...safeData, ssnLast4 });
-      console.log(created);
     } catch (error) {
       errors.push({ sender: "create", message: "Failed to create employee" });
       setSubmitting(false);
-      console.log(error);
       throw new Error("Failed to create employee");
     }
 

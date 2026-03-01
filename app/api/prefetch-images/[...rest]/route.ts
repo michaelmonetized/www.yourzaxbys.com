@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { parseHTML } from "linkedom";
 
@@ -52,7 +53,7 @@ export async function GET(
       }
     );
   } catch (error) {
-    console.error("Error in prefetch-images route:", error);
+    Sentry.captureException(error);
     return new Response("Internal server error", { status: 500 });
   }
 }
