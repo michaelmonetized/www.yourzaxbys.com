@@ -42,13 +42,19 @@ export const listCaps = query({
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    let query: any = ctx.db.query("caps");
-
     if (args.type) {
-      query = query.withIndex("by_type", (q: any) => q.eq("type", args.type!));
+      const caps = await ctx.db
+        .query("caps")
+        .withIndex("by_type", (q) => q.eq("type", args.type!))
+        .order("desc")
+        .take(args.limit ?? 50);
+      return caps;
     }
 
-    const caps = await query.order("desc").take(args.limit ?? 50);
+    const caps = await ctx.db
+      .query("caps")
+      .order("desc")
+      .take(args.limit ?? 50);
     return caps;
   },
 });
